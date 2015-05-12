@@ -1,0 +1,126 @@
+﻿@{
+    Layout = null;
+}
+
+<style>
+    .editIcon {
+        cursor: pointer;
+    }
+
+    .employee {
+        background-color: #0099FF;
+    }
+
+    .outsourcing {
+        background-color: #99CC33;
+    }
+</style>
+<div class="container-fluid">
+    <hr>
+    <hr>
+    <h4>Employee</h4>
+    <hr>
+    <div class="row">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="control-label col-sm-2">Name</label>
+                <div class="col-md-10">
+                    <input type="text" ng-model="Employee.Name" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Address</label>
+                <div class="col-md-7">
+                    <input type="text" ng-model="Employee.Address" class="form-control">
+                </div>
+                <label class="control-label col-sm-1">Addr. №</label>
+                <div class="col-md-2">
+                    <input type="number" ng-model="Employee.AddressNumber" class=" form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Block name/Number</label>
+                <div class="col-md-4">
+                    <input type="text" ng-model="Employee.BlockName" class="form-control">
+                </div>
+                <label class="control-label col-sm-1">Entrance</label>
+                <div class="col-md-1">
+                    <input type="text" ng-model="Employee.Entrace" class=" form-control">
+                </div>
+                <label class="control-label col-sm-1">Floor</label>
+                <div class="col-md-1">
+                    <input type="number" ng-model="Employee.Floor" class=" form-control">
+                </div>
+                <label class="control-label col-sm-1">Apartment</label>
+                <div class="col-md-1">
+                    <input type="text" ng-model="Employee.Apartment" class=" form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Employee Type</label>
+                <div class="col-md-4">
+                    <select ng-model="Employee.Type" class=" form-control">
+                        <option ng-repeat="employeeType in EmployeeTypes" value="{{employeeType.Id}}">{{employeeType.Name}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group" ng-show="Employee.Type == 'Employee' ">
+                <label class="control-label col-sm-2">Employee ID</label>
+                <div class="col-md-4">
+                    <input type="text" class=" form-control">
+                </div>
+                <label class="control-label col-sm-2">Internal Email</label>
+                <div class="col-md-4">
+                    <input type="text" ng-model="Employee.InternalEmail" class=" form-control">
+                </div>
+            </div>
+            <div class="form-group" ng-show="Employee.Type == 'Outsourcing' ">
+                <label class="control-label col-sm-2">External Email</label>
+                <div class="col-md-4">
+                    <input type="text" class=" form-control">
+                </div>
+                <label class="control-label col-sm-2">Vendor Company Name</label>
+                <div class="col-md-4">
+                    <input type="text" ng-model="Employee.VendorCompanyName" class=" form-control">
+                </div>
+            </div>
+
+            <!-- Button -->
+            <div class="control-group">
+                <div class="controls col-md-3 pull-right">
+                    <button id="singlebutton" name="singlebutton" ng-click="add()" class="btn btn-primary  btn-block">Add</button>
+                </div>
+                <div class="controls col-md-3 pull-right">
+                    <button id="singlebutton" name="singlebutton" ng-click="clear()" class="btn btn-primary  btn-block">Clear</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Type</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="emp in Employees" ng-class="{'employee' : emp.Type == 'Employee', 'outsourcing' : emp.Type == 'Outsourcing'}">
+                        <td><span class="editIcon" ng-click="edit($index)">{{emp.Id}}</span></td>
+                        <td>{{emp.Name}}</td>
+                        <td>{{emp.Address}}</td>
+                        <td>{{emp.Type}}</td>
+                        <td><img src="~/Content/delete.png" ng-click="delete()" /></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
