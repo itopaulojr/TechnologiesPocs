@@ -8,14 +8,15 @@ namespace angujarjspoc.Controllers
 {
     public class EmployeeController : Controller
     {
-
+        private const string EMPLOYEE_CACHE = "Employees_cach";
         private List<Employee> Employees
         {
             get
             {
-                if (Session["Employees"] == null)
+                List<Employee> employees = (List<Employee>)Session[EMPLOYEE_CACHE];
+                if (employees == null)
                 {
-                    List<Employee> employees = new List<Employee>();
+                    employees = new List<Employee>();
                     for (int i = 0; i < 10; i++)
                     {
                         Employee employee = new Employee();
@@ -29,10 +30,10 @@ namespace angujarjspoc.Controllers
                         employee.Name = i.ToString();
                         employees.Add(employee);
                     }
-                    Session["Employees"] = employees;
+                    Session[EMPLOYEE_CACHE] = employees;
                 }
 
-                return (List<Employee>)Session["Employees"];
+                return employees;
             }
         }
 
@@ -45,8 +46,8 @@ namespace angujarjspoc.Controllers
 
         public JsonResult Employess()
         {
-
-            return Json(Employees, JsonRequestBehavior.AllowGet);
+            var _employees = Employees;
+            return Json(_employees, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -71,8 +72,17 @@ namespace angujarjspoc.Controllers
             currentEmployee.BlockName = newEmployee.BlockName;
             currentEmployee.Entrace = newEmployee.Entrace;
             currentEmployee.Floor = newEmployee.Floor;
+            currentEmployee.Type = newEmployee.Type;            
 
             return Json(currentEmployee, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpDelete]
+        public JsonResult Employess(string employeeId)
+        {
+            Employee employeeDel = Employees.First(emp => emp.Id == employeeId);
+            Employees.Remove(employeeDel);
+            return Json(null, JsonRequestBehavior.AllowGet);
         }
     }
 

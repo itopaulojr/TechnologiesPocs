@@ -116,11 +116,19 @@
                         <td>{{emp.Name}}</td>
                         <td>{{emp.Address}}</td>
                         <td>{{emp.Type}}</td>
-                        <td><img src="~/Content/delete.png" ng-click="delete()" /></td>
+                        <td><img src="~/Content/delete.png" ng-click="openDelete($index)" /></td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
     </div>
 </div>
+<modal title="Delete?" visible="showModal">
+    <label>Are you sure you want to delete it?</label>
+    <div class="row">
+        <div class="col-md-12">
+            <button ng-click="delete($index)">Yes</button>
+            <button ng-click="closeDelete()">No</button>
+        </div>
+    </div>
+</modal>

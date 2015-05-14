@@ -45,12 +45,11 @@
             </div>
         </div>
     </div>
-    <div class="container body-content" ng-view>
+    <div class="container body-content">
         @{
             var urlHelper = new UrlHelper(Html.ViewContext.RequestContext);
             var baseurl = urlHelper.Content("~");
         }
-        <link id="linkApiRoot" href="@(baseurl)" />
         <div ng-view>
 
         </div>
@@ -63,8 +62,9 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/angular")
+    
     <script type="text/javascript" src="~/Scripts/app.js"></script>
-
+    <script type="text/javascript" src="~/Scripts/auxiliarcomponents.js"></script>
 </body>
 </html>
 

@@ -15,7 +15,7 @@ myApp.config(function ($routeProvider) {
         templateUrl: '/Home/Contact',
         controller: 'ContactController'
     })
-    .when('/Employee', {
+    .when('/Employee/', {
         templateUrl: '/Employee/Index',
         controller: 'EmployeeController'
     })
@@ -40,48 +40,38 @@ myApp.controller('HomeController', ['$scope', '$log', function ($scope, $log) {
 
 
 myApp.factory('employeeFactory', function ($resource) {
-    return $resource("/Employee/Employess", {}, {
-
-    });
+    return $resource("/Employee/Employess");
 });
 
-myApp.controller('EmployeeController', ['$scope', '$window','$filter', 'employeeFactory', function ($scope, $window, $filter,employeeFactory) {
+
+
+myApp.controller('EmployeeController', ['$scope', '$filter', 'employeeFactory', function ($scope,  $filter,employeeFactory) {
     $scope.Employee = {};
-    $scope.Employee.Name = "Paulo";
-    $scope.Employee.Address = "Av. Três de Março";
-    $scope.Employee.AddressNumber = 1435;
-    $scope.Employee.BlockName = "Bl. 14";
-    $scope.Employee.Entrace = "abc";
-    $scope.Employee.Floor = 1;
-    $scope.Employee.Apartment = 103;
-    $scope.Employee.InternalEmail = null;
-    $scope.Employee.VendorCompanyName = null;
-    $scope.Employee.Type = 'Outsourcing';
-
-    $scope.Employees = [];
-
+    $scope.Employees = employeeFactory.query();
     $scope.EmployeeTypes = [{ Id: 'Employee', Name: 'Employee' }, { Id: 'Outsourcing', Name: 'Outsourcing' }];
+    $scope.showModal = false;
 
     $scope.add = function () {
-
-        var newEmployee = true;
-        if($scope.Employee.Id)
-            newEmployee = false;
-
         var employee = employeeFactory.save($scope.Employee, {}, function (data) {
-            if(newEmployee){
-                $scope.Employees.push(data);
-            }else{
-                var employee = $filter('filter')($scope.Employees, { Id: $scope.Employee.Id })[0];
-            }                
-            $scope.Employee = {};
+            $scope.Employees = employeeFactory.query();
         });
-
     }
 
-    $scope.delete = function (index) {
-        //$window.alert('teste');
-        $scope.Employees.splice(index, 1);
+    $scope.openDelete = function (index) {
+        $scope.showModal = !$scope.showModal;
+        $scope.IndexToDelete = index;
+    };
+
+    $scope.closeDelete = function () {
+        $scope.showModal = false;
+    }
+
+    $scope.delete = function () {        
+        var employeeId = $scope.Employees[$scope.IndexToDelete].Id;
+        employeeFactory.delete({ employeeId: employeeId }, function () {
+            $scope.showModal = false;
+            $scope.Employees = employeeFactory.query();            
+        });
     }
 
     $scope.clear = function () {
@@ -91,8 +81,7 @@ myApp.controller('EmployeeController', ['$scope', '$window','$filter', 'employee
 
     $scope.edit = function (index) {
         var employee = $scope.Employees[index];
-        employee.Index = index;
-        $scope.Employee = employee;
+        $scope.Employee = angular.copy(employee);
     }
 
 }]);
