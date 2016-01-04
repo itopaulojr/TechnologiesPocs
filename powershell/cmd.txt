@@ -1,0 +1,3 @@
+cd /download
+dir
+quit
